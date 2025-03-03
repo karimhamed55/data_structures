@@ -7,66 +7,117 @@ struct node {
     node(int data) : data(data), next(nullptr) {}
 };
 
-// Print using while loop
-void print_while_loop(node* head) {
-    while (head != nullptr) {
+// linked_list class
+class linkedlist {
+    private:
+    node*head{};
+    node*tail{};
+    int length = 0;
+    public:
+    // Print using while loop
+    void print_while_loop(node* head) {
+        while (head != nullptr) {
+            cout << head->data << " ";
+            head = head->next;
+        }
+        cout << "\n";
+    }
+    
+    // Print using for loop
+    void print_for_loop(node* head) {
+      for(node* cur = head;cur;cur=cur->next)
+        cout << cur->data << " ";
+        cout << "\n";
+    }
+    // Count nodes
+    int count_nodes(node* head) {
+        int counter = 0;
+        while (head != nullptr) {
+            counter++;
+            head = head->next;
+        }
+        return counter;
+    }
+    
+    
+    // Print recursively
+    void print_recursive(node* head) {
+        if (head == nullptr) {
+            cout << "\n"; 
+            return;
+        }
         cout << head->data << " ";
-        head = head->next;
+        print_recursive(head->next);
     }
-    cout << "\n";
-}
-
-// Count nodes
-int count_nodes(node* head) {
-    int counter = 0;
-    while (head != nullptr) {
-        counter++;
-        head = head->next;
+    
+    // Print in reverse recursively
+    void print3_reverse(node* head) {
+        if (head == nullptr) {
+            return; 
+        }
+        print3_reverse(head->next);
+        cout << head->data << " ";
     }
-    return counter;
-}
-
-// Print using for loop
-void print_for_loop(node* head) {
-    node* temp = head; 
-    int n = count_nodes(head);
-    for (int i = 0; i < n; i++) {
-        cout << temp->data << " ";
-        temp = temp->next;
-    }
-    cout << "\n";
-}
-
-// Print recursively
-void print_recursive(node* head) {
-    if (head == nullptr) {
-        cout << "\n"; 
-        return;
-    }
-    cout << head->data << " ";
-    print_recursive(head->next);
-}
-
-// Print in reverse recursively
-void print3_reverse(node* head) {
-    if (head == nullptr) {
-        return; 
-    }
-    print3_reverse(head->next);
-    cout << head->data << " ";
-}
-// search node by value function
-node* search(node* head, int n)
-{
-    while (head!=nullptr)
+    // get_nth_item
+    node* get_nth_item(int n)
     {
-        if(n==head->data)
-        return head;
-        head = head->next;
-    }
-    return nullptr;
-}
+        int x = 0;
+        for(node* cur =head;cur;cur=cur->next)
+        {
+            if(++x==n)
+            return cur;
 
+        }
+        return nullptr;
+    }
+    // search node by value function
+    node* search(node* head, int n)
+    {
+        while (head!=nullptr)
+        {
+            if(n==head->data)
+            return head;
+            head = head->next;
+        }
+        return nullptr;
+    }
+ // insert at the end
+    void insert_end(int n)
+    {
+        node* item = new node(n);
+        if(!head)
+        head = tail = item;
+        else
+        tail->next = item;
+        tail = item;
+    }
+    // search item 
+    int search(int n)
+    {
+        int x = 0;
+        for(node* cur = head;cur;cur=cur->next,x++)
+        {if (cur->data == n)
+        return x;
+        }
+        return -1;
+    }
+    // search_by_shifting
+    int search_improved(int n)
+    {
+        int x =0;
+        for(node* cur = head,*prv = nullptr;cur;prv=cur,cur=cur->next,x++){
+        if(cur->data == n)
+     {
+            if(!prv)
+            return x;
+            swap(prv->data,cur->data);
+             return x-1;
+        }   
+    }
+        return -1;
+    }
+    };
+  
 int main() {
     // Creating nodes
     node* node1 = new node(6);
@@ -83,22 +134,6 @@ int main() {
     // Printing manually
     cout << node1->data << " " << node1->next->data << " " << node1->next->next->data
          << " " << node1->next->next->next->data << endl;
-
-    // print functions 
-    print_while_loop(node1);
-    print_for_loop(node1);
-    print_recursive(node1);
-    print3_reverse(node1);
-    cout << "\n";
-    
-    node* result = search(node1, 99);
-
-    // Checking the result
-    if (result != nullptr) {
-        cout  << "found"<< endl;
-    } else {
-        cout  << "not found" << endl;
-    }
 
     // Free allocated memory
     delete node1;
