@@ -1,145 +1,187 @@
 #include <iostream>
+#include <cassert>
+#include <climits>
+#include <vector>
+#include <algorithm>
+#include <sstream>
 using namespace std;
 
-struct node {
-    node* next;
-    int data;
-    node(int data) : data(data), next(nullptr) {}
+struct Node {
+    int data { };
+    Node* next { };
+    Node(int data) : data(data) {}
+    ~Node() {
+        cout << "Destroy value: " << data << " at address " << this << "\n";
+    }
 };
 
-// linked_list class
-class linkedlist {
-    private:
-    node*head{};
-    node*tail{};
+class LinkedList {
+private:
+    Node* head { };
+    Node* tail { };
     int length = 0;
-    public:
-    // Print using while loop
-    void print_while_loop(node* head) {
-        while (head != nullptr) {
-            cout << head->data << " ";
-            head = head->next;
-        }
+    vector<Node*> debug_data;
+
+    void debug_add_node(Node* node) {
+        debug_data.push_back(node);
+    }
+    void debug_remove_node(Node* node) {
+        auto it = find(debug_data.begin(), debug_data.end(), node);
+        if (it == debug_data.end())
+            cout << "Node does not exist\n";
+        else
+            debug_data.erase(it);
+    }
+
+public:
+    LinkedList() {}
+    LinkedList(const LinkedList&) = delete;
+    LinkedList& operator=(const LinkedList&) = delete;
+
+    // Debug and utility functions
+    void debug_print_address() {
+        for (Node* cur = head; cur; cur = cur->next)
+            cout << cur << "," << cur->data << "\t";
         cout << "\n";
     }
-    
-    // Print using for loop
-    void print_for_loop(node* head) {
-      for(node* cur = head;cur;cur=cur->next)
-        cout << cur->data << " ";
-        cout << "\n";
-    }
-    // Count nodes
-    int count_nodes(node* head) {
-        int counter = 0;
-        while (head != nullptr) {
-            counter++;
-            head = head->next;
-        }
-        return counter;
-    }
-    
-    
-    // Print recursively
-    void print_recursive(node* head) {
-        if (head == nullptr) {
-            cout << "\n"; 
+
+    void debug_verify_data_integrity() {
+        if (length == 0) {
+            assert(head == nullptr);
+            assert(tail == nullptr);
             return;
         }
-        cout << head->data << " ";
-        print_recursive(head->next);
-    }
-    
-    // Print in reverse recursively
-    void print3_reverse(node* head) {
-        if (head == nullptr) {
-            return; 
+        assert(head != nullptr);
+        assert(tail != nullptr);
+        assert(tail->next == nullptr);
+        if (length == 1)
+            assert(head == tail);
+        else {
+            assert(head != tail);
+            if (length == 2)
+                assert(head->next == tail);
+            else if (length == 3)
+                assert(head->next && head->next->next == tail);
         }
-        print3_reverse(head->next);
-        cout << head->data << " ";
+        int len = 0;
+        for (Node* cur = head; cur; cur = cur->next, len++)
+            assert(len < 10000);
+        assert(length == len);
+        assert(length == (int)debug_data.size());
     }
-    // get_nth_item
-    node* get_nth_item(int n)
-    {
-        int x = 0;
-        for(node* cur =head;cur;cur=cur->next)
-        {
-            if(++x==n)
-            return cur;
 
-        }
-        return nullptr;
+    // Basic operations
+    void print() {
+        for (Node* cur = head; cur; cur = cur->next)
+            cout << cur->data << " ";
+        cout << "\n";
     }
-    // search node by value function
-    node* search(node* head, int n)
-    {
-        while (head!=nullptr)
-        {
-            if(n==head->data)
-            return head;
-            head = head->next;
-        }
-        return nullptr;
-    }
- // insert at the end
-    void insert_end(int n)
-    {
-        node* item = new node(n);
-        if(!head)
-        head = tail = item;
+
+    void insert_end(int value) {
+        Node* item = new Node(value);
+        debug_add_node(item);
+        length++;
+        
+        if (!head)
+            head = tail = item;
         else
-        tail->next = item;
-        tail = item;
+            tail->next = item, tail = item;
+        
+        debug_verify_data_integrity();
     }
-    // search item 
-    int search(int n)
-    {
-        int x = 0;
-        for(node* cur = head;cur;cur=cur->next,x++)
-        {if (cur->data == n)
-        return x;
+
+    // Enhanced functions from first code
+    Node* get_nth(int n) {
+        int cnt = 0;
+        for (Node* cur = head; cur; cur = cur->next)
+            if (++cnt == n)
+                return cur;
+        return nullptr;
+    }
+
+    Node* search(int value) {
+        for (Node* cur = head; cur; cur = cur->next)
+            if (cur->data == value)
+                return cur;
+        return nullptr;
+    }
+
+    int search_index(int value) {
+        int idx = 0;
+        for (Node* cur = head; cur; cur = cur->next, idx++)
+            if (cur->data == value)
+                return idx;
+        return -1;
+    }
+
+    int search_improved(int value) {
+        int idx = 0;
+        for (Node *cur = head, *prev = nullptr; cur; prev = cur, cur = cur->next, idx++) {
+            if (cur->data == value) {
+                if (!prev) return idx; // Already head
+                swap(prev->data, cur->data);
+                return idx - 1;
+            }
         }
         return -1;
     }
-    // search_by_shifting
-    int search_improved(int n)
-    {
-        int x =0;
-        for(node* cur = head,*prv = nullptr;cur;prv=cur,cur=cur->next,x++){
-        if(cur->data == n)
-     {
-            if(!prv)
-            return x;
-            swap(prv->data,cur->data);
-             return x-1;
-        }   
+
+    // Utility functions
+    int get_length() const {
+        return length;
     }
-        return -1;
+
+    ~LinkedList() {
+        while (head) {
+            Node* temp = head;
+            head = head->next;
+            delete temp;
+        }
     }
-    };
-  
+};
+
+// Test functions
+void test1() {
+    cout << "\nTest1\n";
+    LinkedList list;
+    list.insert_end(5);
+    list.insert_end(3);
+    list.insert_end(8);
+    list.insert_end(2);
+
+    assert(list.search_index(5) == 0);
+    assert(list.search_index(8) == 2);
+    
+    assert(list.search_improved(8) == 1); // Swaps with previous
+    assert(list.search_index(8) == 1); // Verify new position
+    
+    cout << "After searching for 8: ";
+    list.print(); // Should show 5 8 3 2
+}
+
+void test2() {
+    cout << "\nTest2\n";
+    LinkedList list;
+    list.insert_end(1);
+    list.insert_end(2);
+    list.insert_end(3);
+    list.insert_end(4);
+
+    assert(list.get_nth(1)->data == 1);
+    assert(list.get_nth(3)->data == 3);
+    assert(list.search(5) == nullptr);
+    
+    cout << "Original list: ";
+    list.print();
+    
+    list.search_improved(3);
+    cout << "After searching for 3: ";
+    list.print(); // Should show 1 3 2 4
+}
+
 int main() {
-    // Creating nodes
-    node* node1 = new node(6);
-    node* node2 = new node(8);
-    node* node3 = new node(99);
-    node* node4 = new node(213);
-
-    // Linking nodes
-    node1->next = node2;
-    node2->next = node3;
-    node3->next = node4;
-    node4->next = nullptr; 
-
-    // Printing manually
-    cout << node1->data << " " << node1->next->data << " " << node1->next->next->data
-         << " " << node1->next->next->next->data << endl;
-
-    // Free allocated memory
-    delete node1;
-    delete node2;
-    delete node3;
-    delete node4;
-
+    test1();
+    test2();
+    cout << "\n\nNo runtime errors found!\n";
     return 0;
 }
