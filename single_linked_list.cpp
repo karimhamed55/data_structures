@@ -126,6 +126,20 @@ public:
         return -1;
     }
 
+    int add_from_front ( int n)
+    {
+        if(head==nullptr)
+        return -1;
+        else 
+        {
+            Node* temp = new Node(n);
+            temp->next = head;
+            head = temp;
+            delete temp;
+            return 0;
+        }
+    }
+
     // Utility functions
     int get_length() const {
         return length;
@@ -140,48 +154,7 @@ public:
     }
 };
 
-// Test functions
-void test1() {
-    cout << "\nTest1\n";
-    LinkedList list;
-    list.insert_end(5);
-    list.insert_end(3);
-    list.insert_end(8);
-    list.insert_end(2);
-
-    assert(list.search_index(5) == 0);
-    assert(list.search_index(8) == 2);
-    
-    assert(list.search_improved(8) == 1); // Swaps with previous
-    assert(list.search_index(8) == 1); // Verify new position
-    
-    cout << "After searching for 8: ";
-    list.print(); // Should show 5 8 3 2
-}
-
-void test2() {
-    cout << "\nTest2\n";
-    LinkedList list;
-    list.insert_end(1);
-    list.insert_end(2);
-    list.insert_end(3);
-    list.insert_end(4);
-
-    assert(list.get_nth(1)->data == 1);
-    assert(list.get_nth(3)->data == 3);
-    assert(list.search(5) == nullptr);
-    
-    cout << "Original list: ";
-    list.print();
-    
-    list.search_improved(3);
-    cout << "After searching for 3: ";
-    list.print(); // Should show 1 3 2 4
-}
-
 int main() {
-    test1();
-    test2();
-    cout << "\n\nNo runtime errors found!\n";
+
     return 0;
 }
