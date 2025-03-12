@@ -90,54 +90,51 @@ public:
         debug_verify_data_integrity();
     }
 
-    // Enhanced functions from first code
+    // Get nth node (1-based index)
     Node* get_nth(int n) {
-        int cnt = 0;
-        for (Node* cur = head; cur; cur = cur->next)
-            if (++cnt == n)
+        int cnt = 1;
+        for (Node* cur = head; cur; cur = cur->next, cnt++) {
+            if (cnt == n)
                 return cur;
+        }
         return nullptr;
     }
 
-    Node* search(int value) {
-        for (Node* cur = head; cur; cur = cur->next)
-            if (cur->data == value)
-                return cur;
-        return nullptr;
-    }
-
-    int search_index(int value) {
-        int idx = 0;
-        for (Node* cur = head; cur; cur = cur->next, idx++)
-            if (cur->data == value)
-                return idx;
-        return -1;
-    }
-
-    int search_improved(int value) {
-        int idx = 0;
-        for (Node *cur = head, *prev = nullptr; cur; prev = cur, cur = cur->next, idx++) {
-            if (cur->data == value) {
-                if (!prev) return idx; // Already head
-                swap(prev->data, cur->data);
-                return idx - 1;
-            }
+    // Delete nth node from the list (1-based index)
+    void delete_from_middle(int n) {
+        if (n < 1 || n > length) {
+            cout << "Error. No such nth node\n";
+            return;
         }
-        return -1;
+        else if (n == 1) {
+            delete_front();
+        }
+        else {
+            // Get the node before nth
+            Node* previous = get_nth(n - 1);
+            Node* current = previous->next;
+            bool is_tail = current == tail;
+            
+            // Link previous node to the one after current
+            previous->next = current->next;
+            if (is_tail)
+                tail = previous;
+
+            delete current;
+            length--;
+            debug_verify_data_integrity();
+        }
     }
 
-    int add_from_front ( int n)
-    {
-        if(head==nullptr)
-        return -1;
-        else 
-        {
-            Node* temp = new Node(n);
-            temp->next = head;
-            head = temp;
-            delete temp;
-            return 0;
-        }
+    // Delete the first node in the list
+    void delete_front() {
+        if (!head) return;
+        Node* temp = head;
+        head = head->next;
+        delete temp;
+        length--;
+        if (length == 0)
+            tail = nullptr;
     }
 
     // Utility functions
@@ -155,6 +152,15 @@ public:
 };
 
 int main() {
+    LinkedList list;
+    list.insert_end(10);
+    list.insert_end(20);
+    list.insert_end(30);
+    list.insert_end(40);
+    list.print();
+
+    list.delete_from_middle(2); // Delete second node (20)
+    list.print();
 
     return 0;
 }
