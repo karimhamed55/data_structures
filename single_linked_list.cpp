@@ -113,6 +113,32 @@ public:
             current = current->next;
         }
     }
+    // delete by key 
+void delete_key(int n)
+{
+    if (head == nullptr) return;
+    
+    while (head && head->data==n)
+    {
+     Node* del=head;
+        head=head->next;
+     delete del;   
+
+    }
+    Node*temp=head;
+    
+    while(temp->next!=nullptr)
+    {
+        if(temp->next->data==n)
+        {
+            Node* del=temp->next;
+            temp->next=temp->next->next;
+            delete del;
+        }
+        else
+        temp=temp->next;
+    }
+    }
 
     // Display the linked list
     void display() {
@@ -249,10 +275,10 @@ int main() {
 
     ll.insertFromFront(20);
     ll.insertFromFront(-10);
-    cout << "List with Duplicates: ";
-    ll.display();
     ll.removeDuplicates();
-    cout << "After Removing Duplicates: ";
+   cout << "\n";
+    ll.display();
+    ll.delete_key(20);
     ll.display();
 
     return 0;
