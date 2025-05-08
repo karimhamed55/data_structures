@@ -29,20 +29,35 @@ public:
         head = newNode;
     }
 
-    // Insert a new node at a specific position in the list
-    void insertInMiddle(int n, int position) {
+    // Insert a new node at the end of the list
+    void insertFromEnd(int n) {
         Node* newNode = new Node(n);
-        if (position == 0 || head == nullptr) {
+        if (head == nullptr) {
+            head = newNode;
+            return;
+        }
+        Node* temp = head;
+        while (temp->next != nullptr) {
+            temp = temp->next;
+        }
+        temp->next = newNode;
+    }
+
+    // Insert a new node at a specific position in the list
+    void insertAtPosition(int n, int pos) {
+        Node* newNode = new Node(n);
+        if (pos == 0) {
             newNode->next = head;
             head = newNode;
             return;
         }
         Node* temp = head;
-        for (int i = 0; temp != nullptr && i < position - 1; i++) {
+        for (int i = 0; i < pos - 1 && temp != nullptr; i++) {
             temp = temp->next;
         }
         if (temp == nullptr) {
             cout << "Position out of bounds\n";
+            delete newNode;
             return;
         }
         newNode->next = temp->next;
@@ -59,41 +74,87 @@ public:
         head = head->next;
         delete temp;
     }
-    // sorting function using bubble sort
-    void  sortlist()
-    {
-        if(!head || !head->next)
-            return;
-            bool swapped;
-            do 
-            {
-                swapped = false;
-                Node* cur = head;
-                while (cur->next!=nullptr)
-                {
-                    if(cur->data > cur->next->data)
-                    {
-                     swap (cur->data, cur->next->data);
-                        swapped = true;
-                    }
-                    cur = cur->next;
-                }}
-                while(swapped);
-            }
 
-    // Split the list into two based on sign (positive and negative numbers)
-    void splitBySign(LinkedList &positiveList, LinkedList &negativeList) {
+    // Delete the last node in the list
+    void deleteFromEnd() {
+        if (head == nullptr) {
+            cout << "Empty list\n";
+            return;
+        }
+        if (head->next == nullptr) {
+            delete head;
+            head = nullptr;
+            return;
+        }
         Node* temp = head;
-        while (temp != nullptr) {
-            if (temp->data >= 0) {
-                positiveList.insertFromFront(temp->data);
-            } else {
-                negativeList.insertFromFront(temp->data);
-            }
+        while (temp->next->next != nullptr) {
             temp = temp->next;
         }
-        positiveList.sortlist();
-        negativeList.sortlist();
+        delete temp->next;
+        temp->next = nullptr;
+    }
+
+    // Delete a node at a specific position in the list
+    void deleteAtPosition(int pos) {
+        if (head == nullptr) {
+            cout << "Empty list\n";
+            return;
+        }
+
+        if (pos < 0) {
+            cout << "Invalid position\n";
+            return;
+        }
+
+        if (pos == 0) {
+            Node* temp = head;
+            head = head->next;
+            delete temp;
+            return;
+        }
+
+        Node* temp = head;
+        int i = 0;
+        while (temp != nullptr && i < pos - 1) {
+            temp = temp->next;
+            i++;
+        }
+
+        if (temp == nullptr || temp->next == nullptr) {
+            cout << "Position out of bounds\n";
+            return;
+        }
+
+        Node* delNode = temp->next;
+        temp->next = delNode->next;
+        delete delNode;
+    }
+
+    // Delete nodes by key
+    void delete_key(int n) {
+        if (head == nullptr) {
+            cout << "Empty list\n";
+            return;
+        }
+
+        while (head && head->data == n) {
+            Node* del = head;
+            head = head->next;
+            delete del;
+        }
+
+        if (head == nullptr) return;
+
+        Node* temp = head;
+        while (temp->next != nullptr) {
+            if (temp->next->data == n) {
+                Node* del = temp->next;
+                temp->next = temp->next->next;
+                delete del;
+            } else {
+                temp = temp->next;
+            }
+        }
     }
 
     // Remove duplicate values from the list
@@ -113,31 +174,56 @@ public:
             current = current->next;
         }
     }
-    // delete by key 
-void delete_key(int n)
-{
-    if (head == nullptr) return;
-    
-    while (head && head->data==n)
-    {
-     Node* del=head;
-        head=head->next;
-     delete del;   
 
-    }
-    Node*temp=head;
-    
-    while(temp->next!=nullptr)
-    {
-        if(temp->next->data==n)
-        {
-            Node* del=temp->next;
-            temp->next=temp->next->next;
-            delete del;
+    // Sort the linked list (bubble sort)
+    void sort() {
+        if (head == nullptr || head->next == nullptr) {
+            return; // List is empty or has only one element
         }
-        else
-        temp=temp->next;
+
+        Node* current = head;
+        Node* index = nullptr;
+        int temp;
+
+        while (current != nullptr) {
+            index = current->next;
+            while (index != nullptr) {
+                if (current->data > index->data) {
+                    temp = current->data;
+                    current->data = index->data;
+                    index->data = temp;
+                }
+                index = index->next;
+            }
+            current = current->next;
+        }
     }
+
+    // Split the list into two based on sign (positive and negative numbers)
+    void splitBySign(LinkedList &positiveList, LinkedList &negativeList) {
+        Node* temp = head;
+        while (temp != nullptr) {
+            if (temp->data >= 0) {
+                positiveList.insertFromEnd(temp->data);
+            } else {
+                negativeList.insertFromEnd(temp->data);
+            }
+            temp = temp->next;
+        }
+    }
+
+    // Reverse the linked list
+    void reverse() {
+        Node* prev = nullptr;
+        Node* current = head;
+        Node* next = nullptr;
+        while (current != nullptr) {
+            next = current->next;
+            current->next = prev;
+            prev = current;
+            current = next;
+        }
+        head = prev;
     }
 
     // Display the linked list
@@ -175,94 +261,13 @@ public:
     }
 };
 
-// Node class for doubly linked list
-class DoublyNode {
-public:
-    int data;
-    DoublyNode* next;
-    DoublyNode* prev;
-
-    DoublyNode(int n) {
-        data = n;
-        next = prev = nullptr;
-    }
-};
-
-// Doubly Linked List class
-class DoublyLinkedList {
-public:
-    DoublyNode* head;
-
-    DoublyLinkedList() {
-        head = nullptr;
-    }
-
-    // Insert a node at the front of the doubly linked list
-    void insertFromFront(int n) {
-        DoublyNode* newNode = new DoublyNode(n);
-        if (head != nullptr) {
-            newNode->next = head;
-            head->prev = newNode;
-        }
-        head = newNode;
-    }
-
-    // Display the doubly linked list
-    void display() {
-        DoublyNode* temp = head;
-        while (temp != nullptr) {
-            cout << temp->data << " <-> ";
-            temp = temp->next;
-        }
-        cout << "null\n";
-    }
-};
-
-// List implemented as an array
-class ArrayList {
-public:
-    int* arr;
-    int size;
-    int capacity;
-
-    ArrayList(int cap) {
-        capacity = cap;
-        size = 0;
-        arr = new int[capacity];
-    }
-
-    // Insert an element into the array list
-    void insert(int n) {
-        if (size == capacity) {
-            cout << "Array is full\n";
-            return;
-        }
-        arr[size++] = n;
-    }
-
-    // Display the array list
-    void display() {
-        if (size == 0) {
-            cout << "Empty array list\n";
-            return;
-        }
-        for (int i = 0; i < size; i++) {
-            cout << arr[i] << " ";
-        }
-        cout << endl;
-    }
-
-    ~ArrayList() {
-        delete[] arr;
-    }
-};
-
 int main() {
     LinkedList ll;
     ll.insertFromFront(-10);
     ll.insertFromFront(20);
     ll.insertFromFront(-30);
     ll.insertFromFront(40);
+
     cout << "Original List: ";
     ll.display();
 
@@ -276,9 +281,12 @@ int main() {
     ll.insertFromFront(20);
     ll.insertFromFront(-10);
     ll.removeDuplicates();
-   cout << "\n";
+
+    cout << "\nList after removing duplicates: ";
     ll.display();
+
     ll.delete_key(20);
+    cout << "List after deleting key 20: ";
     ll.display();
 
     return 0;
