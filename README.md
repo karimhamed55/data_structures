@@ -1,36 +1,37 @@
-🚀 My Data Structures & Algorithms Journey with C++
-📌 About This Repository
-Welcome to my Data Structures & Algorithms (DSA) with C++ journey! 🎯 I'm on a mission to master DSA while writing clean, efficient C++ code. This repository will serve as my digital notebook, where I publish all my solutions, notes, and learnings. Feel free to follow along, contribute, or just watch me struggle through recursion! 😅
+# 🚀 My Data Structures & Algorithms Journey with C++
 
-🎯 Goals
-🔥 Master fundamental and advanced DSA concepts
+## 📌 About This Repository
 
-🛠️ Write optimized and well-documented C++ code
+Welcome to my **Data Structures & Algorithms (DSA) with C++** journey! 🎯 I'm on a mission to master DSA while writing clean, efficient C++ code. This repository will serve as my **digital notebook**, where I publish all my solutions, notes, and learnings. Feel free to follow along, contribute, or just watch me struggle through recursion! 😅
 
-📝 Share insights, challenges, and problem-solving approaches
+## 🎯 Goals
 
-🚀 Become a better problem solver and prepare for coding interviews
+* 🔥 Master fundamental and advanced DSA concepts
+* 🛠️ Write optimized and well-documented C++ code
+* 📝 Share insights, challenges, and problem-solving approaches
+* 🚀 Become a better problem solver and prepare for coding interviews
 
-🏁 Progress
-Topic	Status
-🔄 vector	✅ Done
-✅ Asymptotic Complexity	✅ Done
-🔢 Singly Linked List	✅ Done
-🔢 Doubly Linked List	🚀 In Progress
-🏗️ Project: Sparse Array and Matrix	⏳ Coming Soon
-📦 Stack	⏳ Coming Soon
-📦 Queue	⏳ Coming Soon
-🌳 Binary Tree	⏳ Coming Soon
-🌳 Binary Search Tree	⏳ Coming Soon
-📈 Binary Heap	⏳ Coming Soon
-🌲 AVL Tree	⏳ Coming Soon
-🔠 Letter Tree (Trie)	⏳ Coming Soon
-🔍 Hash Table	⏳ Coming Soon
+## 🏁 Progress
 
-📂 Repository Structure
-mathematica
-Copy
-Edit
+| Topic                                | Status         |
+| ------------------------------------ | -------------- |
+| 🔄 vector                            | ✅ Done         |
+| ✅ Asymptotic Complexity              | ✅ Done         |
+| 🔢 Singly Linked List                | ✅ Done         |
+| 🔢 Doubly Linked List                | 🚀 In Progress |
+| 🏗️ Project: Sparse Array and Matrix | ⏳ Coming Soon  |
+| 📦 Stack                             | ⏳ Coming Soon  |
+| 📦 Queue                             | ⏳ Coming Soon  |
+| 🌳 Binary Tree                       | ⏳ Coming Soon  |
+| 🌳 Binary Search Tree                | ⏳ Coming Soon  |
+| 📈 Binary Heap                       | ⏳ Coming Soon  |
+| 🌲 AVL Tree                          | ⏳ Coming Soon  |
+| 🔠 Letter Tree (Trie)                | ⏳ Coming Soon  |
+| 🔍 Hash Table                        | ⏳ Coming Soon  |
+
+## 📂 Repository Structure
+
+```
 📂 DSA-with-C++
  ┣ 📂 vector
  ┣ 📂 Asymptotic Complexity
@@ -41,8 +42,17 @@ Edit
  ┣ 📂 Trees
  ┣ 📂 Hash_Table
  ┣ 📜 README.md  <- You're here! 🧐
-✨ Finale: Why This Matters
-This isn’t just a coding repository — it’s a commitment to growth. Every bug, every late-night debug session, and every “aha!” moment adds up. By staying consistent and learning deeply, I'm preparing for a future where I can solve real-world problems with confidence.
+```
 
-Whether you're a recruiter, a fellow learner, or just passing by — thank you for checking this out. Here's to progress, persistence, and clean code. 💪
+### ✅ Finale: The Road Ahead
+
+This repository is more than just code — it's a record of consistent effort toward mastering DSA. Every topic, every commit, and every line of C++ brings me one step closer to:
+
+* 💼 A strong foundation for coding interviews
+* 🧠 Better problem-solving skills
+* 🚀 Real-world software development readiness
+
+Thanks for stopping by! Stay tuned for more updates as I keep building, learning, and sharing. 🔧📘
+
+---
 
